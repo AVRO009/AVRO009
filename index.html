@@ -1,0 +1,2597 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>AVRO009 — Time Is Design</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+
+/* =========================================================
+   AVRO009 — DIGITAL ATELIER
+========================================================= */
+
+:root{
+    --black:#050505;
+    --black2:#0a0a0a;
+    --ivory:#eeeae1;
+    --grey:#8b8984;
+    --dark:#383735;
+    --line:rgba(238,234,225,.13);
+    --gold:#a9956d;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:var(--black);
+    color:var(--ivory);
+    font-family:Inter,Arial,sans-serif;
+    font-weight:300;
+    overflow-x:hidden;
+}
+
+body::-webkit-scrollbar{
+    width:4px;
+}
+
+body::-webkit-scrollbar-track{
+    background:#050505;
+}
+
+body::-webkit-scrollbar-thumb{
+    background:#555;
+}
+
+a{
+    color:inherit;
+    text-decoration:none;
+}
+
+button{
+    font-family:inherit;
+}
+
+
+/* =========================================================
+   GLOBAL GRAIN
+========================================================= */
+
+.grain{
+    position:fixed;
+    inset:-50%;
+    width:200%;
+    height:200%;
+    z-index:9999;
+    pointer-events:none;
+    opacity:.035;
+
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.6'/%3E%3C/svg%3E");
+
+    animation:grainMove .25s steps(2) infinite;
+}
+
+@keyframes grainMove{
+    0%{transform:translate(0,0)}
+    25%{transform:translate(2%,-1%)}
+    50%{transform:translate(-1%,2%)}
+    75%{transform:translate(1%,1%)}
+    100%{transform:translate(-2%,-1%)}
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header{
+    position:fixed;
+    z-index:5000;
+    top:0;
+    left:0;
+    width:100%;
+    height:82px;
+
+    padding:0 4vw;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    mix-blend-mode:normal;
+
+    background:linear-gradient(
+        to bottom,
+        rgba(5,5,5,.85),
+        transparent
+    );
+}
+
+.logo{
+    font-family:"Cormorant Garamond",serif;
+    font-size:28px;
+    letter-spacing:10px;
+    font-weight:500;
+}
+
+.nav{
+    display:flex;
+    gap:40px;
+}
+
+.nav a{
+    color:#aaa7a0;
+    font-size:9px;
+    letter-spacing:3px;
+    text-transform:uppercase;
+    transition:.4s;
+}
+
+.nav a:hover{
+    color:white;
+}
+
+.header-cart{
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.025);
+    color:white;
+
+    padding:11px 17px;
+
+    cursor:pointer;
+
+    font-size:9px;
+    letter-spacing:2px;
+
+    transition:.4s;
+}
+
+.header-cart:hover{
+    background:var(--ivory);
+    color:#050505;
+}
+
+#cartCount{
+    margin-left:7px;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+    position:relative;
+    min-height:100vh;
+    height:100vh;
+
+    overflow:hidden;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:
+        radial-gradient(
+            circle at 50% 45%,
+            #191816 0,
+            #090909 38%,
+            #030303 80%
+        );
+}
+
+.hero-grid{
+    position:absolute;
+    inset:0;
+
+    opacity:.18;
+
+    background-image:
+        linear-gradient(
+            rgba(255,255,255,.07) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(255,255,255,.07) 1px,
+            transparent 1px
+        );
+
+    background-size:100px 100px;
+
+    mask-image:linear-gradient(
+        to bottom,
+        transparent,
+        black 25%,
+        black 75%,
+        transparent
+    );
+}
+
+
+/* Giant moving typography */
+
+.hero-word{
+    position:absolute;
+
+    white-space:nowrap;
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:clamp(130px,25vw,420px);
+
+    font-weight:300;
+
+    letter-spacing:-15px;
+
+    color:rgba(255,255,255,.025);
+
+    user-select:none;
+
+    animation:heroText 28s linear infinite;
+}
+
+.hero-word.one{
+    top:7%;
+    left:-25%;
+}
+
+.hero-word.two{
+    bottom:5%;
+    right:-30%;
+    animation-direction:reverse;
+}
+
+@keyframes heroText{
+    from{
+        transform:translateX(0);
+    }
+    to{
+        transform:translateX(30%);
+    }
+}
+
+
+/* Decorative dial */
+
+.dial{
+    position:absolute;
+
+    width:min(62vw,650px);
+    height:min(62vw,650px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:50%;
+
+    animation:rotateDial 45s linear infinite;
+}
+
+.dial::before,
+.dial::after{
+    content:"";
+
+    position:absolute;
+
+    inset:7%;
+
+    border:1px solid rgba(255,255,255,.045);
+
+    border-radius:50%;
+}
+
+.dial::after{
+    inset:18%;
+}
+
+@keyframes rotateDial{
+    from{
+        transform:rotate(0deg);
+    }
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+.dial-mark{
+    position:absolute;
+    width:1px;
+    height:12px;
+    background:rgba(255,255,255,.25);
+    left:50%;
+    top:0;
+    transform-origin:0 calc(min(31vw,325px));
+}
+
+
+/* Hero watch */
+
+.hero-watch{
+    position:relative;
+    z-index:4;
+
+    width:min(42vw,520px);
+    max-height:75vh;
+
+    object-fit:contain;
+
+    filter:
+        contrast(1.05)
+        brightness(.9)
+        drop-shadow(0 35px 50px rgba(0,0,0,.7));
+
+    transform:
+        translateY(20px)
+        scale(1);
+
+    animation:watchFloat 7s ease-in-out infinite;
+}
+
+@keyframes watchFloat{
+    0%,100%{
+        transform:translateY(20px);
+    }
+
+    50%{
+        transform:translateY(5px);
+    }
+}
+
+
+/* Hero labels */
+
+.hero-top{
+    position:absolute;
+    z-index:5;
+    top:125px;
+    left:4vw;
+
+    font-size:9px;
+    letter-spacing:4px;
+    color:#777;
+}
+
+.hero-top span{
+    color:var(--gold);
+}
+
+.hero-bottom-left{
+    position:absolute;
+    z-index:5;
+    bottom:45px;
+    left:4vw;
+
+    color:#777;
+
+    font-size:9px;
+    letter-spacing:3px;
+}
+
+.hero-bottom-right{
+    position:absolute;
+    z-index:5;
+    bottom:45px;
+    right:4vw;
+
+    color:#777;
+
+    font-size:9px;
+    letter-spacing:3px;
+}
+
+
+/* Center hero title */
+
+.hero-title{
+    position:absolute;
+    z-index:5;
+
+    bottom:17%;
+
+    text-align:center;
+
+    pointer-events:none;
+}
+
+.hero-title-small{
+    color:#aaa;
+    font-size:8px;
+    letter-spacing:7px;
+    margin-bottom:14px;
+}
+
+.hero-title h1{
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:clamp(60px,8vw,120px);
+
+    font-weight:300;
+
+    line-height:.75;
+
+    letter-spacing:-3px;
+}
+
+.hero-title p{
+    margin-top:22px;
+
+    color:#777;
+
+    font-size:9px;
+    letter-spacing:4px;
+}
+
+
+/* =========================================================
+   MOVING TICKER
+========================================================= */
+
+.ticker{
+    overflow:hidden;
+
+    border-top:1px solid var(--line);
+    border-bottom:1px solid var(--line);
+
+    background:#070707;
+
+    white-space:nowrap;
+}
+
+.ticker-track{
+    display:inline-flex;
+
+    padding:23px 0;
+
+    animation:ticker 25s linear infinite;
+}
+
+.ticker-item{
+    display:inline-flex;
+    align-items:center;
+
+    margin-right:70px;
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:27px;
+
+    color:#aaa69e;
+
+    letter-spacing:2px;
+}
+
+.ticker-dot{
+    width:4px;
+    height:4px;
+
+    margin-left:70px;
+
+    border-radius:50%;
+
+    background:var(--gold);
+}
+
+@keyframes ticker{
+    from{
+        transform:translateX(0);
+    }
+
+    to{
+        transform:translateX(-50%);
+    }
+}
+
+
+/* =========================================================
+   MANIFESTO
+========================================================= */
+
+.manifesto{
+    position:relative;
+
+    padding:180px 8vw;
+
+    min-height:75vh;
+
+    display:flex;
+    align-items:center;
+
+    overflow:hidden;
+}
+
+.manifesto-number{
+    position:absolute;
+
+    right:4vw;
+    top:50%;
+
+    transform:translateY(-50%);
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:35vw;
+
+    line-height:1;
+
+    color:rgba(255,255,255,.018);
+
+    pointer-events:none;
+}
+
+.manifesto-content{
+    position:relative;
+    z-index:2;
+
+    max-width:1000px;
+}
+
+.eyebrow{
+    color:var(--gold);
+
+    font-size:9px;
+    letter-spacing:5px;
+
+    margin-bottom:35px;
+}
+
+.manifesto h2{
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:clamp(60px,9vw,140px);
+
+    font-weight:300;
+
+    line-height:.78;
+
+    letter-spacing:-4px;
+}
+
+.manifesto h2 em{
+    color:#77736c;
+    font-style:normal;
+}
+
+.manifesto-copy{
+    max-width:420px;
+
+    margin-top:45px;
+
+    color:#777;
+
+    font-size:12px;
+
+    line-height:2;
+}
+
+
+/* =========================================================
+   COLLECTION INTRO
+========================================================= */
+
+.collection-intro{
+    padding:100px 5vw 60px;
+
+    display:flex;
+
+    justify-content:space-between;
+    align-items:flex-end;
+}
+
+.collection-label{
+    color:var(--gold);
+
+    font-size:9px;
+    letter-spacing:5px;
+
+    margin-bottom:17px;
+}
+
+.collection-heading{
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:clamp(55px,8vw,115px);
+
+    font-weight:300;
+
+    line-height:.78;
+}
+
+.collection-side{
+    color:#666;
+
+    font-size:9px;
+
+    letter-spacing:3px;
+
+    text-align:right;
+}
+
+
+/* =========================================================
+   EDITORIAL PRODUCTS
+========================================================= */
+
+.collection{
+    position:relative;
+
+    padding-bottom:180px;
+}
+
+.products{
+    padding:0 5vw;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    column-gap:7vw;
+    row-gap:150px;
+}
+
+.product{
+    position:relative;
+
+    cursor:pointer;
+}
+
+.product:nth-child(2){
+    margin-top:130px;
+}
+
+.product:nth-child(3){
+    margin-top:-50px;
+}
+
+.product:nth-child(4){
+    margin-top:100px;
+}
+
+.product:nth-child(5){
+    margin-top:-40px;
+}
+
+.product:nth-child(6){
+    margin-top:120px;
+}
+
+.product-image-wrap{
+    position:relative;
+
+    overflow:hidden;
+
+    background:#0b0b0b;
+
+    aspect-ratio:4/5;
+}
+
+.product-image-wrap::before{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    z-index:2;
+
+    pointer-events:none;
+
+    border:1px solid rgba(255,255,255,.08);
+}
+
+.product-image{
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    transition:
+        transform 1.2s cubic-bezier(.2,.7,.2,1),
+        filter 1s ease;
+}
+
+.product:hover .product-image{
+    transform:scale(1.055);
+    filter:brightness(.78);
+}
+
+.product-overlay{
+    position:absolute;
+
+    z-index:3;
+
+    inset:0;
+
+    display:flex;
+
+    align-items:center;
+    justify-content:center;
+
+    opacity:0;
+
+    transition:.5s;
+
+    background:rgba(0,0,0,.18);
+}
+
+.product:hover .product-overlay{
+    opacity:1;
+}
+
+.discover{
+    border:1px solid rgba(255,255,255,.5);
+
+    padding:13px 20px;
+
+    font-size:8px;
+    letter-spacing:3px;
+
+    background:rgba(0,0,0,.3);
+
+    backdrop-filter:blur(5px);
+}
+
+.product-number{
+    position:absolute;
+
+    z-index:4;
+
+    top:22px;
+    left:22px;
+
+    font-size:9px;
+
+    letter-spacing:4px;
+
+    color:#999;
+}
+
+.product-info{
+    padding:22px 4px 0;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:flex-start;
+}
+
+.product-name{
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:28px;
+
+    font-weight:400;
+}
+
+.product-meta{
+    margin-top:7px;
+
+    color:#555;
+
+    font-size:8px;
+
+    letter-spacing:3px;
+
+    text-transform:uppercase;
+}
+
+.product-price{
+    color:#aaa;
+
+    font-size:11px;
+
+    letter-spacing:1px;
+}
+
+
+/* =========================================================
+   SECOND TICKER
+========================================================= */
+
+.ticker.reverse .ticker-track{
+    animation-direction:reverse;
+    animation-duration:32s;
+}
+
+
+/* =========================================================
+   BRAND STATEMENT
+========================================================= */
+
+.brand-statement{
+    position:relative;
+
+    min-height:90vh;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    overflow:hidden;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #141310,
+            #050505 65%
+        );
+}
+
+.brand-ring{
+    position:absolute;
+
+    width:65vw;
+    height:65vw;
+
+    max-width:850px;
+    max-height:850px;
+
+    border:1px solid rgba(255,255,255,.06);
+
+    border-radius:50%;
+
+    animation:slowRotate 35s linear infinite;
+}
+
+.brand-ring::before{
+    content:"";
+
+    position:absolute;
+
+    inset:10%;
+
+    border:1px solid rgba(255,255,255,.04);
+
+    border-radius:50%;
+}
+
+@keyframes slowRotate{
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(-360deg);
+    }
+}
+
+.brand-center{
+    position:relative;
+
+    z-index:2;
+
+    text-align:center;
+}
+
+.brand-center-small{
+    color:var(--gold);
+
+    font-size:8px;
+
+    letter-spacing:6px;
+
+    margin-bottom:25px;
+}
+
+.brand-center h2{
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:clamp(70px,12vw,180px);
+
+    font-weight:300;
+
+    line-height:.7;
+
+    letter-spacing:-6px;
+}
+
+.brand-center p{
+    margin-top:35px;
+
+    color:#666;
+
+    font-size:9px;
+
+    letter-spacing:4px;
+}
+
+
+/* =========================================================
+   CONTACT
+========================================================= */
+
+.contact{
+    padding:150px 7vw;
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+
+    gap:10vw;
+
+    border-top:1px solid var(--line);
+}
+
+.contact-label{
+    color:var(--gold);
+
+    font-size:9px;
+
+    letter-spacing:5px;
+}
+
+.contact h2{
+    margin-top:25px;
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:clamp(65px,9vw,125px);
+
+    font-weight:300;
+
+    line-height:.75;
+}
+
+.contact-right{
+    align-self:end;
+
+    max-width:430px;
+}
+
+.contact-right p{
+    color:#777;
+
+    font-size:12px;
+
+    line-height:2;
+}
+
+.socials{
+    display:flex;
+
+    gap:30px;
+
+    margin-top:40px;
+}
+
+.socials a{
+    padding-bottom:8px;
+
+    border-bottom:1px solid #555;
+
+    font-size:9px;
+
+    letter-spacing:3px;
+
+    text-transform:uppercase;
+
+    transition:.3s;
+}
+
+.socials a:hover{
+    border-color:white;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+    padding:35px 5vw;
+
+    border-top:1px solid var(--line);
+
+    display:flex;
+
+    justify-content:space-between;
+
+    color:#555;
+
+    font-size:8px;
+
+    letter-spacing:3px;
+}
+
+
+/* =========================================================
+   PRODUCT MODAL
+========================================================= */
+
+.modal{
+    position:fixed;
+
+    z-index:8000;
+
+    inset:0;
+
+    display:none;
+
+    align-items:center;
+    justify-content:center;
+
+    padding:25px;
+
+    background:rgba(0,0,0,.88);
+
+    backdrop-filter:blur(20px);
+}
+
+.modal.active{
+    display:flex;
+}
+
+.modal-close{
+    position:absolute;
+
+    z-index:10;
+
+    top:22px;
+    right:30px;
+
+    border:none;
+    background:none;
+
+    color:white;
+
+    font-size:30px;
+
+    cursor:pointer;
+}
+
+.modal-box{
+    width:min(1050px,100%);
+
+    max-height:90vh;
+
+    overflow:auto;
+
+    background:#090909;
+
+    border:1px solid var(--line);
+
+    display:grid;
+
+    grid-template-columns:1fr 1fr;
+}
+
+.modal-image{
+    width:100%;
+
+    height:100%;
+
+    min-height:620px;
+
+    object-fit:cover;
+}
+
+.modal-content{
+    padding:65px 50px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+}
+
+.modal-number{
+    color:var(--gold);
+
+    font-size:8px;
+
+    letter-spacing:5px;
+}
+
+.modal-title{
+    margin-top:20px;
+
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:56px;
+
+    font-weight:300;
+
+    line-height:.9;
+}
+
+.modal-price{
+    margin-top:25px;
+
+    font-size:14px;
+}
+
+.modal-description{
+    margin-top:30px;
+
+    color:#777;
+
+    font-size:12px;
+
+    line-height:2;
+}
+
+.add-button{
+    margin-top:40px;
+
+    border:none;
+
+    padding:18px;
+
+    background:var(--ivory);
+
+    color:#050505;
+
+    cursor:pointer;
+
+    font-size:9px;
+
+    letter-spacing:3px;
+
+    text-transform:uppercase;
+
+    transition:.3s;
+}
+
+.add-button:hover{
+    background:white;
+}
+
+
+/* =========================================================
+   CART
+========================================================= */
+
+.cart-overlay{
+    position:fixed;
+
+    z-index:9000;
+
+    inset:0;
+
+    display:none;
+
+    background:rgba(0,0,0,.75);
+}
+
+.cart-overlay.active{
+    display:block;
+}
+
+.cart{
+    position:absolute;
+
+    right:0;
+    top:0;
+
+    width:min(460px,100%);
+
+    height:100%;
+
+    padding:35px;
+
+    background:#080808;
+
+    border-left:1px solid var(--line);
+
+    display:flex;
+
+    flex-direction:column;
+}
+
+.cart-header{
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding-bottom:25px;
+
+    border-bottom:1px solid var(--line);
+}
+
+.cart-title{
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:35px;
+
+    font-weight:300;
+}
+
+.cart-close{
+    border:none;
+
+    background:none;
+
+    color:white;
+
+    font-size:27px;
+
+    cursor:pointer;
+}
+
+.cart-items{
+    flex:1;
+
+    overflow:auto;
+
+    padding-top:25px;
+}
+
+.empty-cart{
+    padding-top:30px;
+
+    color:#555;
+
+    font-size:11px;
+}
+
+.cart-item{
+    display:grid;
+
+    grid-template-columns:70px 1fr auto;
+
+    gap:15px;
+
+    align-items:center;
+
+    margin-bottom:25px;
+}
+
+.cart-item-image{
+    width:70px;
+    height:80px;
+
+    object-fit:cover;
+}
+
+.cart-item-name{
+    font-family:"Cormorant Garamond",serif;
+
+    font-size:20px;
+}
+
+.cart-item-meta{
+    margin-top:5px;
+
+    color:#666;
+
+    font-size:9px;
+
+    letter-spacing:1px;
+}
+
+.remove{
+    border:none;
+
+    background:none;
+
+    color:#666;
+
+    font-size:20px;
+
+    cursor:pointer;
+}
+
+.cart-bottom{
+    padding-top:25px;
+
+    border-top:1px solid var(--line);
+}
+
+.total{
+    display:flex;
+
+    justify-content:space-between;
+
+    margin-bottom:20px;
+
+    font-size:12px;
+}
+
+.whatsapp{
+    width:100%;
+
+    border:none;
+
+    padding:18px;
+
+    background:var(--ivory);
+
+    color:#050505;
+
+    cursor:pointer;
+
+    font-size:9px;
+
+    letter-spacing:3px;
+
+    text-transform:uppercase;
+
+    transition:.3s;
+}
+
+.whatsapp:hover{
+    background:white;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:750px){
+
+    header{
+        height:70px;
+
+        padding:0 20px;
+    }
+
+    .logo{
+        font-size:22px;
+
+        letter-spacing:7px;
+    }
+
+    .nav{
+        display:none;
+    }
+
+    .header-cart{
+        padding:9px 12px;
+    }
+
+
+    .hero{
+        min-height:760px;
+    }
+
+    .hero-word{
+        font-size:145px;
+
+        letter-spacing:-7px;
+    }
+
+    .hero-watch{
+        width:75vw;
+
+        max-height:52vh;
+    }
+
+    .dial{
+        width:100vw;
+        height:100vw;
+    }
+
+    .hero-title{
+        bottom:13%;
+    }
+
+    .hero-title h1{
+        font-size:70px;
+    }
+
+    .hero-top{
+        top:100px;
+        left:20px;
+    }
+
+    .hero-bottom-left{
+        left:20px;
+    }
+
+    .hero-bottom-right{
+        right:20px;
+    }
+
+
+    .ticker-item{
+        font-size:21px;
+
+        margin-right:45px;
+    }
+
+    .ticker-dot{
+        margin-left:45px;
+    }
+
+
+    .manifesto{
+        padding:120px 25px;
+
+        min-height:650px;
+    }
+
+    .manifesto h2{
+        font-size:68px;
+
+        letter-spacing:-2px;
+    }
+
+    .manifesto-number{
+        font-size:90vw;
+    }
+
+
+    .collection-intro{
+        padding:90px 20px 50px;
+
+        display:block;
+    }
+
+    .collection-heading{
+        font-size:67px;
+    }
+
+    .collection-side{
+        margin-top:30px;
+
+        text-align:left;
+    }
+
+
+    .products{
+        grid-template-columns:1fr;
+
+        padding:0 20px;
+
+        gap:90px;
+    }
+
+    .product:nth-child(n){
+        margin-top:0;
+    }
+
+    .product:nth-child(even){
+        margin-left:8vw;
+    }
+
+
+    .product-name{
+        font-size:25px;
+    }
+
+
+    .brand-statement{
+        min-height:700px;
+    }
+
+    .brand-ring{
+        width:100vw;
+        height:100vw;
+    }
+
+    .brand-center h2{
+        font-size:80px;
+    }
+
+
+    .contact{
+        padding:100px 25px;
+
+        grid-template-columns:1fr;
+
+        gap:60px;
+    }
+
+    .contact h2{
+        font-size:78px;
+    }
+
+
+    footer{
+        padding:25px 20px;
+
+        flex-direction:column;
+
+        gap:13px;
+    }
+
+
+    .modal-box{
+        grid-template-columns:1fr;
+
+        max-height:90vh;
+    }
+
+    .modal-image{
+        min-height:320px;
+
+        height:320px;
+    }
+
+    .modal-content{
+        padding:35px 25px;
+    }
+
+    .modal-title{
+        font-size:45px;
+    }
+
+
+    .cart{
+        padding:25px;
+    }
+
+}
+
+</style>
+</head>
+
+
+<body>
+
+<div class="grain"></div>
+
+
+<!-- =======================================================
+     HEADER
+======================================================= -->
+
+<header>
+
+    <a href="#" class="logo">
+        AVRO009
+    </a>
+
+    <nav class="nav">
+
+        <a href="#collection">
+            Collection
+        </a>
+
+        <a href="#brand">
+            World
+        </a>
+
+        <a href="#contact">
+            Contact
+        </a>
+
+    </nav>
+
+    <button
+        class="header-cart"
+        onclick="openCart()"
+    >
+        BAG
+        <span id="cartCount">0</span>
+    </button>
+
+</header>
+
+
+<!-- =======================================================
+     HERO
+======================================================= -->
+
+<section class="hero">
+
+    <div class="hero-grid"></div>
+
+    <div class="hero-word one">
+        AVRO009
+    </div>
+
+    <div class="hero-word two">
+        TIME
+    </div>
+
+
+    <div class="dial">
+
+        <span
+            class="dial-mark"
+            style="transform:rotate(0deg)"
+        ></span>
+
+        <span
+            class="dial-mark"
+            style="transform:rotate(30deg)"
+        ></span>
+
+        <span
+            class="dial-mark"
+            style="transform:rotate(60deg)"
+        ></span>
+
+        <span
+            class="dial-mark"
+            style="transform:rotate(90deg)"
+        ></span>
+
+        <span
+            class="dial-mark"
+            style="transform:rotate(120deg)"
+        ></span>
+
+        <span
+            class="dial-mark"
+            style="transform:rotate(150deg)"
+        ></span>
+
+        <span
+            class="dial-mark"
+            style="transform:rotate(180deg)"
+        ></span>
+
+        <span
+            class="dial-mark"
+            style="transform:rotate(210deg)"
+        ></span>
+
+        <span
+            class="dial-mark"
+            style="transform:rotate(240deg)"
+        ></span>
+
+        <span
+            class="dial-mark"
+            style="transform:rotate(270deg)"
+        ></span>
+
+        <span
+            class="dial-mark"
+            style="transform:rotate(300deg)"
+        ></span>
+
+        <span
+            class="dial-mark"
+            style="transform:rotate(330deg)"
+        ></span>
+
+    </div>
+
+
+    <div class="hero-top">
+        AVRO009 <span>·</span> 001 / 009
+    </div>
+
+
+    <img
+        src="IMG_4099.jpeg"
+        alt="AVRO009"
+        class="hero-watch"
+    >
+
+
+    <div class="hero-title">
+
+        <div class="hero-title-small">
+            THE FIRST EDITION
+        </div>
+
+        <h1>
+            Time.
+        </h1>
+
+        <p>
+            REFINED · REIMAGINED
+        </p>
+
+    </div>
+
+
+    <div class="hero-bottom-left">
+        2026 — AVRO009
+    </div>
+
+    <div class="hero-bottom-right">
+        SCROLL ↓
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     TICKER
+======================================================= -->
+
+<div class="ticker">
+
+    <div class="ticker-track">
+
+        <div class="ticker-item">
+            AVRO009
+            <span class="ticker-dot"></span>
+        </div>
+
+        <div class="ticker-item">
+            TIME IS DESIGN
+            <span class="ticker-dot"></span>
+        </div>
+
+        <div class="ticker-item">
+            PRECISION / IDENTITY
+            <span class="ticker-dot"></span>
+        </div>
+
+        <div class="ticker-item">
+            AVRO009
+            <span class="ticker-dot"></span>
+        </div>
+
+        <div class="ticker-item">
+            TIME IS DESIGN
+            <span class="ticker-dot"></span>
+        </div>
+
+        <div class="ticker-item">
+            PRECISION / IDENTITY
+            <span class="ticker-dot"></span>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     MANIFESTO
+======================================================= -->
+
+<section class="manifesto">
+
+    <div class="manifesto-number">
+        009
+    </div>
+
+    <div class="manifesto-content">
+
+        <div class="eyebrow">
+            THE AVRO009 PHILOSOPHY
+        </div>
+
+        <h2>
+            Time is not<br>
+            <em>just measured.</em><br>
+            It is worn.
+        </h2>
+
+        <p class="manifesto-copy">
+            AVRO009 zaman anlayışını dizaynın dili ilə
+            ifadə edir. Sakit, fərqli və müasir.
+            Hər model şəxsi üslubun bir detalına çevrilmək
+            üçün seçilib.
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     SECOND TICKER
+======================================================= -->
+
+<div class="ticker reverse">
+
+    <div class="ticker-track">
+
+        <div class="ticker-item">
+            009 — 009 — 009
+            <span class="ticker-dot"></span>
+        </div>
+
+        <div class="ticker-item">
+            MODERN HOROLOGY
+            <span class="ticker-dot"></span>
+        </div>
+
+        <div class="ticker-item">
+            AVRO009
+            <span class="ticker-dot"></span>
+        </div>
+
+        <div class="ticker-item">
+            009 — 009 — 009
+            <span class="ticker-dot"></span>
+        </div>
+
+        <div class="ticker-item">
+            MODERN HOROLOGY
+            <span class="ticker-dot"></span>
+        </div>
+
+        <div class="ticker-item">
+            AVRO009
+            <span class="ticker-dot"></span>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     COLLECTION
+======================================================= -->
+
+<section
+    class="collection"
+    id="collection"
+>
+
+    <div class="collection-intro">
+
+        <div>
+
+            <div class="collection-label">
+                AVRO009 / COLLECTION 01
+            </div>
+
+            <h2 class="collection-heading">
+                Selected<br>
+                Timepieces.
+            </h2>
+
+        </div>
+
+        <div class="collection-side">
+            06 PIECES<br>
+            2026 EDITION
+        </div>
+
+    </div>
+
+
+    <div
+        class="products"
+        id="products"
+    ></div>
+
+</section>
+
+
+<!-- =======================================================
+     BRAND WORLD
+======================================================= -->
+
+<section
+    class="brand-statement"
+    id="brand"
+>
+
+    <div class="brand-ring"></div>
+
+    <div class="brand-center">
+
+        <div class="brand-center-small">
+            AVRO009 / WORLD
+        </div>
+
+        <h2>
+            Beyond<br>
+            Time.
+        </h2>
+
+        <p>
+            DESIGN · IDENTITY · MOMENT
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     CONTACT
+======================================================= -->
+
+<section
+    class="contact"
+    id="contact"
+>
+
+    <div>
+
+        <div class="contact-label">
+            AVRO009 / CONNECT
+        </div>
+
+        <h2>
+            Stay<br>
+            Connected.
+        </h2>
+
+    </div>
+
+
+    <div class="contact-right">
+
+        <p>
+            Kolleksiyanı kəşf edin, seçilmiş modelinizi
+            səbətə əlavə edin və sifarişinizi WhatsApp
+            üzərindən tamamlayın.
+        </p>
+
+
+        <div class="socials">
+
+            <a
+                href="https://www.instagram.com/avro___009/"
+                target="_blank"
+            >
+                Instagram
+            </a>
+
+            <a
+                href="https://www.tiktok.com/@avro_009"
+                target="_blank"
+            >
+                TikTok
+            </a>
+
+            <a
+                href="https://wa.me/994773250009"
+                target="_blank"
+            >
+                WhatsApp
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =======================================================
+     FOOTER
+======================================================= -->
+
+<footer>
+
+    <span>
+        © 2026 AVRO009
+    </span>
+
+    <span>
+        TIME IS DESIGN
+    </span>
+
+    <span>
+        009
+    </span>
+
+</footer>
+
+
+<!-- =======================================================
+     PRODUCT MODAL
+======================================================= -->
+
+<div
+    class="modal"
+    id="productModal"
+>
+
+    <button
+        class="modal-close"
+        onclick="closeProduct()"
+    >
+        ×
+    </button>
+
+
+    <div class="modal-box">
+
+        <img
+            id="modalImage"
+            class="modal-image"
+            src=""
+            alt=""
+        >
+
+
+        <div class="modal-content">
+
+            <div
+                id="modalNumber"
+                class="modal-number"
+            ></div>
+
+
+            <div
+                id="modalTitle"
+                class="modal-title"
+            ></div>
+
+
+            <div
+                id="modalPrice"
+                class="modal-price"
+            ></div>
+
+
+            <div
+                id="modalDescription"
+                class="modal-description"
+            ></div>
+
+
+            <button
+                class="add-button"
+                onclick="addCurrentProduct()"
+            >
+                Add to Bag
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     CART
+======================================================= -->
+
+<div
+    class="cart-overlay"
+    id="cartOverlay"
+>
+
+    <div class="cart">
+
+        <div class="cart-header">
+
+            <div class="cart-title">
+                Your Selection
+            </div>
+
+            <button
+                class="cart-close"
+                onclick="closeCart()"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div
+            class="cart-items"
+            id="cartItems"
+        ></div>
+
+
+        <div class="cart-bottom">
+
+            <div class="total">
+
+                <span>
+                    TOTAL
+                </span>
+
+                <strong id="cartTotal">
+                    0 AZN
+                </strong>
+
+            </div>
+
+
+            <button
+                class="whatsapp"
+                onclick="sendWhatsApp()"
+            >
+                Complete Order via WhatsApp
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =========================================================
+   PRODUCTS
+========================================================= */
+
+const products = [
+
+    {
+        id:1,
+        name:"AVRO009 — Model 01",
+        image:"IMG_4099.jpeg",
+        price:50,
+        description:
+        "Zərif və müasir görünüşü ilə gündəlik üsluba premium toxunuş əlavə edən seçilmiş AVRO009 modeli."
+    },
+
+    {
+        id:2,
+        name:"AVRO009 — Model 02",
+        image:"IMG_4102.jpeg",
+        price:55,
+        description:
+        "Minimalist detalları və elegant görünüşü ilə klassik və müasir üslubu bir araya gətirən model."
+    },
+
+    {
+        id:3,
+        name:"AVRO009 — Model 03",
+        image:"IMG_4105.jpeg",
+        price:35,
+        description:
+        "Sadə, incə və müasir görünüşü ilə gündəlik kombinlər üçün seçilmiş AVRO009 modeli."
+    },
+
+    {
+        id:4,
+        name:"AVRO009 — Model 04",
+        image:"IMG_4106.jpeg",
+        price:30,
+        description:
+        "Təmiz xətləri və minimal estetikası ilə fərqli üslublara uyğunlaşan seçilmiş model."
+    },
+
+    {
+        id:5,
+        name:"AVRO009 — Model 05",
+        image:"IMG_4107.jpeg",
+        price:30,
+        description:
+        "Zərif görünüşü və sakit estetikası ilə gündəlik stil üçün seçilmiş AVRO009 modeli."
+    },
+
+    {
+        id:6,
+        name:"AVRO009 — Model 06",
+        image:"IMG_4110.jpeg",
+        price:35,
+        description:
+        "Klassik estetikanı müasir toxunuşlarla tamamlayan fərqli və zamansız AVRO009 modeli."
+    }
+
+];
+
+
+let cart = [];
+
+let currentProduct = null;
+
+
+/* =========================================================
+   RENDER PRODUCTS
+========================================================= */
+
+function renderProducts(){
+
+    const container =
+        document.getElementById("products");
+
+    container.innerHTML = "";
+
+
+    products.forEach((product,index)=>{
+
+        const element =
+            document.createElement("article");
+
+        element.className = "product";
+
+
+        element.onclick = function(){
+
+            openProduct(product.id);
+
+        };
+
+
+        element.innerHTML = `
+
+            <div class="product-image-wrap">
+
+                <img
+                    src="${product.image}"
+                    alt="${product.name}"
+                    class="product-image"
+                >
+
+                <div class="product-number">
+                    0${index + 1} / 06
+                </div>
+
+                <div class="product-overlay">
+
+                    <div class="discover">
+                        DISCOVER
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="product-info">
+
+                <div>
+
+                    <div class="product-name">
+                        ${product.name}
+                    </div>
+
+                    <div class="product-meta">
+                        AVRO009 / TIMEPIECE
+                    </div>
+
+                </div>
+
+                <div class="product-price">
+                    ${product.price} AZN
+                </div>
+
+            </div>
+
+        `;
+
+
+        container.appendChild(element);
+
+    });
+
+}
+
+
+/* =========================================================
+   PRODUCT MODAL
+========================================================= */
+
+function openProduct(id){
+
+    const product =
+        products.find(
+            p => p.id === id
+        );
+
+    if(!product) return;
+
+
+    currentProduct = product;
+
+
+    document.getElementById("modalImage").src =
+        product.image;
+
+
+    document.getElementById("modalImage").alt =
+        product.name;
+
+
+    document.getElementById("modalNumber").innerText =
+        "AVRO009 / 0" + product.id;
+
+
+    document.getElementById("modalTitle").innerText =
+        product.name;
+
+
+    document.getElementById("modalPrice").innerText =
+        product.price + " AZN";
+
+
+    document.getElementById("modalDescription").innerText =
+        product.description;
+
+
+    document
+        .getElementById("productModal")
+        .classList.add("active");
+
+}
+
+
+function closeProduct(){
+
+    document
+        .getElementById("productModal")
+        .classList.remove("active");
+
+}
+
+
+/* =========================================================
+   ADD TO BAG
+========================================================= */
+
+function addCurrentProduct(){
+
+    if(!currentProduct) return;
+
+
+    const existing =
+        cart.find(
+            item =>
+                item.id === currentProduct.id
+        );
+
+
+    if(existing){
+
+        existing.quantity++;
+
+    }else{
+
+        cart.push({
+
+            ...currentProduct,
+
+            quantity:1
+
+        });
+
+    }
+
+
+    updateCart();
+
+    closeProduct();
+
+    openCart();
+
+}
+
+
+/* =========================================================
+   UPDATE CART
+========================================================= */
+
+function updateCart(){
+
+    const count =
+        cart.reduce(
+            (total,item)=>
+                total + item.quantity,
+            0
+        );
+
+
+    document.getElementById("cartCount").innerText =
+        count;
+
+
+    const container =
+        document.getElementById("cartItems");
+
+
+    container.innerHTML = "";
+
+
+    if(cart.length === 0){
+
+        container.innerHTML = `
+
+            <div class="empty-cart">
+                Your selection is currently empty.
+            </div>
+
+        `;
+
+    }
+
+
+    cart.forEach(item=>{
+
+        const element =
+            document.createElement("div");
+
+        element.className = "cart-item";
+
+
+        element.innerHTML = `
+
+            <img
+                src="${item.image}"
+                class="cart-item-image"
+                alt="${item.name}"
+            >
+
+            <div>
+
+                <div class="cart-item-name">
+                    ${item.name}
+                </div>
+
+                <div class="cart-item-meta">
+                    ${item.price} AZN × ${item.quantity}
+                </div>
+
+            </div>
+
+            <button
+                class="remove"
+                onclick="removeFromCart(${item.id})"
+            >
+                ×
+            </button>
+
+        `;
+
+
+        container.appendChild(element);
+
+    });
+
+
+    const total =
+        cart.reduce(
+            (sum,item)=>
+                sum +
+                item.price * item.quantity,
+            0
+        );
+
+
+    document.getElementById("cartTotal").innerText =
+        total + " AZN";
+
+}
+
+
+/* =========================================================
+   REMOVE
+========================================================= */
+
+function removeFromCart(id){
+
+    cart =
+        cart.filter(
+            item =>
+                item.id !== id
+        );
+
+
+    updateCart();
+
+}
+
+
+/* =========================================================
+   CART OPEN / CLOSE
+========================================================= */
+
+function openCart(){
+
+    document
+        .getElementById("cartOverlay")
+        .classList.add("active");
+
+}
+
+
+function closeCart(){
+
+    document
+        .getElementById("cartOverlay")
+        .classList.remove("active");
+
+}
+
+
+/* =========================================================
+   WHATSAPP
+========================================================= */
+
+function sendWhatsApp(){
+
+    if(cart.length === 0){
+
+        alert("Səbətiniz boşdur.");
+
+        return;
+
+    }
+
+
+    let message =
+        "Salam, AVRO009-dan sifariş vermək istəyirəm.\n\n";
+
+
+    cart.forEach(item=>{
+
+        message +=
+            item.name +
+            " × " +
+            item.quantity +
+            " — " +
+            (item.price * item.quantity) +
+            " AZN\n";
+
+    });
+
+
+    const total =
+        cart.reduce(
+            (sum,item)=>
+                sum +
+                item.price * item.quantity,
+            0
+        );
+
+
+    message +=
+        "\nÜmumi məbləğ: " +
+        total +
+        " AZN";
+
+
+    const url =
+        "https://wa.me/994773250009?text=" +
+        encodeURIComponent(message);
+
+
+    window.open(
+        url,
+        "_blank"
+    );
+
+}
+
+
+/* =========================================================
+   OUTSIDE CLICK
+========================================================= */
+
+document
+    .getElementById("productModal")
+    .addEventListener(
+        "click",
+        function(event){
+
+            if(event.target === this){
+
+                closeProduct();
+
+            }
+
+        }
+    );
+
+
+document
+    .getElementById("cartOverlay")
+    .addEventListener(
+        "click",
+        function(event){
+
+            if(event.target === this){
+
+                closeCart();
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+renderProducts();
+
+updateCart();
+
+</script>
+
+</body>
+</html>
